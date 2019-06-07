@@ -4,6 +4,7 @@ import Home from './views/Home.vue';
 import Waiting from './views/Waiting.vue';
 import Quiz from './views/Quiz.vue';
 import Ranking from './views/Ranking.vue';
+import Viewer from '@/views/Viewer.vue'
 import API from '@/API';
 
 Vue.use(Router);
@@ -31,12 +32,17 @@ let router = new Router({
       path: '/ranking',
       name: "ranking",
       component: Ranking,
+    },
+    {
+      path: '/view',
+      name: "view",
+      component: Viewer,
     }
   ],
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.path != "/" && API.getObservable() == null) {
+  if (to.path !== '/' && to.path !== '/view' && API.getObservable() == null) {
     next("/")
 
     return;

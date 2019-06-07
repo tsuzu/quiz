@@ -5,15 +5,23 @@ let observable: Stream<{}>;
 
 export default {
   async connect(name: string) {
+    return await this.__connect(name);
+  },
+
+  async connectAsViewer() {
+    return await this.__connect(undefined);
+  },
+
+  async __connect(name?: string) {
     if (conn == null) {
-      conn = new WebSocket("ws://192.168.1.10:7040");
+      conn = new WebSocket("wss://q2.tsuzu.xyz");
       return new Promise((resolve, reject) => {
         if (conn == null) {
           reject("conn is null");
           return
         }
         conn.onopen = () => {
-          conn!.send(JSON.stringify({ "name": name }));
+          conn!.send(JSON.stringify({ "name": name !== undefined ? name! : "" }));
 
           var producer = {
             start: function (listener: any) {

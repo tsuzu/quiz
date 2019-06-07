@@ -12,32 +12,43 @@
 </template>
 
 
-<script>
+<script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import API from "@/API";
+import { Stream } from "xstream";
 
 export default Vue.extend({
   data() {
-    return {
+    const self = {
       waiting: 1,
       listener: {
-        next: t => {
+        next(t: { type: string; value: number }) {
           console.log(t);
-          this.waiting = t["value"];
+          self.waiting = t["value"];
         }
       }
     };
+
+    return self;
   },
   created() {
-    let observable = API.getObservable();
+    let observable = (API.getObservable() as any) as Stream<{
+      type: string;
+      value: number;
+    }>;
 
-    observable.filter(t => t["type"] == "number").addListener(this.listener);
+    observable
+      .filter((t: { type: string; value: number }) => t["type"] == "number")
+      .addListener(this.listener);
   },
   beforeRouteLeave(to, from, next) {
     console.log("removing");
-    let observable = API.getObservable();
+    let observable = API.getObservable() as any;
 
-    observable.removeListener(this.listener);
+    (observable as Stream<{
+      type: string;
+      value: number;
+    }>).removeListener(this.listener);
 
     next();
   }
