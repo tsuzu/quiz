@@ -1,31 +1,43 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+  <v-app>
+    <v-toolbar color="blue darken-4" app overflow clipped-left fixed extended :extension-height="4">
+      <v-toolbar-title class="white--text">MIS.W Quiz</v-toolbar-title>
+      <v-progress-linear
+        slot="extension"
+        v-model="progress"
+        class="ma-0"
+        color="red accent-1"
+        :height="4"
+        style="padding: 0px"
+      ></v-progress-linear>
+    </v-toolbar>
+    <v-content>
+      <router-view/>
+    </v-content>
+  </v-app>
 </template>
 
+<script lang="ts">
+import Vue from "vue";
+import store from "./store";
+
+export default Vue.extend({
+  name: "App",
+  data() {
+    return {
+      //
+    };
+  },
+  computed: {
+    progress() {
+      return store.state.progress;
+    }
+  }
+});
+</script>
+
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+.v-toolbar__extension {
+  padding: 0px !important;
 }
 </style>
